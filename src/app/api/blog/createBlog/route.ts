@@ -5,8 +5,6 @@ export async function POST(request: Request) {
     try {
         const { title, img, description, like } = await request.json();
 
-
-
         const data = await client.post.create({
             data: {
                 title,
