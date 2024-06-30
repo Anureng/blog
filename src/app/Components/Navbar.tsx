@@ -4,7 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 const Navbar = () => {
     return (
-        <header className="fixed top-0 left-0 z-50 w-full bg-white shadow-sm dark:bg-gray-950">
+        <header className=" top-0 left-0 z-50 w-full bg-white shadow-sm dark:bg-gray-950">
             <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
                 <Link href="#" className="flex items-center gap-2" prefetch={false}>
 
@@ -17,7 +17,7 @@ const Navbar = () => {
                     <Link href="#" className="text-sm font-medium hover:underline hover:underline-offset-4" prefetch={false}>
                         About
                     </Link>
-                    <Link href="#" className="text-sm font-medium hover:underline hover:underline-offset-4" prefetch={false}>
+                    <Link href="/blog" className="text-sm font-medium hover:underline hover:underline-offset-4" prefetch={false}>
                         Blog
                     </Link>
                     <Link href="#" className="text-sm font-medium hover:underline hover:underline-offset-4" prefetch={false}>

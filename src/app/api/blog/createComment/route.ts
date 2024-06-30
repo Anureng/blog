@@ -1,27 +1,41 @@
-import { PrismaClient } from "@prisma/client";
+import client from "@/libs/prismadb";
 import { NextResponse } from "next/server";
 
-const client = new PrismaClient();
 
-export async function PUT(request: Request) {
+
+export async function POST(request: Request, { params }: { params: { userId: string } }) {
     try {
         const body = await request.json();
-        const { id, name } = body;
+        const { name } = body;
 
-        // Validate that the comment ID and new name are provided
-        if (!id || !name) {
-            return new NextResponse("Comment ID and new name are required", { status: 400 });
+        // Validate that the user ID and comment name are provided
+        if (!name) {
+            return new NextResponse("User ID and comment name are required", { status: 400 });
         }
 
-        // Update the existing comment
-        const updatedComment = await client.comment.update({
-            where: { id },
-            data: {
-                name,
-            },
+        // Fetch the existing post to retrieve current comments
+        const existingPost = await client.post.findUnique({
+            where: { id: params.userId },
+            include: { comment: true },
         });
 
-        return new NextResponse(JSON.stringify(updatedComment), { status: 200 });
+        if (!existingPost) {
+            return new NextResponse("Post not found", { status: 404 });
+        }
+
+        // Prepare the new comment data
+        const newCommentData = {
+            name: name,
+            // Assuming 'authorId' needs to be associated with the comment
+            postId: existingPost.id,
+        };
+
+        // Create the new comment and associate it with the post
+        const newComment = await client.comment.create({
+            data: newCommentData,
+        });
+
+        return new NextResponse(JSON.stringify(newComment), { status: 201 });
     } catch (error: any) {
         console.error(error);
         return new NextResponse(error.message, { status: 500 });
