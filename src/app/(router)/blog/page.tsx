@@ -4,7 +4,7 @@ import Navbar from '@/app/Components/Navbar';
 import React from 'react';
 
 const fetchBlogData = async () => {
-    const res = await fetch("http://localhost:3000/api/blog/getBlogData");
+    const res = await fetch("https://blog-gold-beta.vercel.app/api/blog/getBlogData");
     if (!res.ok) {
         throw new Error('Failed to fetch data');
     }
