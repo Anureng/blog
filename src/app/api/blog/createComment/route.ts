@@ -1,21 +1,19 @@
 import client from "@/libs/prismadb";
 import { NextResponse } from "next/server";
 
-
-
-export async function POST(request: Request, { params }: { params: { userId: string } }) {
+export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { name } = body;
+        const { name, postId } = body;
 
-        // Validate that the user ID and comment name are provided
-        if (!name) {
-            return new NextResponse("User ID and comment name are required", { status: 400 });
+        // Validate that the user ID, post ID, and comment name are provided
+        if (!postId || !name) {
+            return new NextResponse("User ID, Post ID, and comment name are required", { status: 400 });
         }
 
-        // Fetch the existing post to retrieve current comments
+        // Fetch the existing post to ensure it exists
         const existingPost = await client.post.findUnique({
-            where: { id: params.userId },
+            where: { id: postId },
             include: { comment: true },
         });
 
@@ -23,16 +21,12 @@ export async function POST(request: Request, { params }: { params: { userId: str
             return new NextResponse("Post not found", { status: 404 });
         }
 
-        // Prepare the new comment data
-        const newCommentData = {
-            name: name,
-            // Assuming 'authorId' needs to be associated with the comment
-            postId: existingPost.id,
-        };
-
         // Create the new comment and associate it with the post
         const newComment = await client.comment.create({
-            data: newCommentData,
+            data: {
+                name: name,
+                postId: postId,
+            },
         });
 
         return new NextResponse(JSON.stringify(newComment), { status: 201 });
