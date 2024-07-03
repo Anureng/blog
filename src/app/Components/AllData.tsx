@@ -6,6 +6,8 @@ interface Props {
 }
 
 const AllData: React.FC<Props> = ({ data }) => {
+    console.log(data);
+
     return (
         <div className='post-list space-y-4'>
             {data.map((post, index) => (
