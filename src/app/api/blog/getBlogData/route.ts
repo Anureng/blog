@@ -5,11 +5,12 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
     try {
         const cacheKey = "post";
-        const MAX_AGE = 60 * 60; // 1 hour in seconds
 
         const cachedData = await redis.get(cacheKey);
         if (cachedData) {
             // If data exists in the cache, return it
+            console.log("Coming For Cache");
+
             return NextResponse.json(cachedData);
         }
 
@@ -21,7 +22,7 @@ export async function GET(request: Request) {
         });
 
         // Store the fetched data in Redis cache with an expiration time
-        await redis.set(cacheKey, JSON.stringify(posts), { ex: MAX_AGE });
+        await redis.set(cacheKey, JSON.stringify(posts));
 
         // Return the fetched data
         return NextResponse.json(posts);

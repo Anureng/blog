@@ -13,13 +13,27 @@ model Post {
     img         String
     description String
     like        Int
+    author      Author    @relation(fields: [authorId], references: [id])
+    authorId    String
+    tags        String[]
+    imageUrl    String?
+    excerpt     String?
+    slug        String    @unique
     comment     Comment[]
+}
+
+model Author {
+    id         String  @id @default(cuid())
+    name       String
+    profileUrl String?
+    posts      Post[]
 }
 
 model User {
     id        String   @id @default(cuid())
     name      String?
     email     String?  @unique
+    password  String?
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -31,7 +45,6 @@ model Comment {
     name      String
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @updatedAt @map("updated_at")
-
-    postId String
-    post   Post   @relation(fields: [postId], references: [id])
+    postId    String
+    post      Post     @relation(fields: [postId], references: [id])
 }

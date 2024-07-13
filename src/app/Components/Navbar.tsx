@@ -1,56 +1,250 @@
-import { Input } from '@/components/ui/input'
-import { SearchIcon } from 'lucide-react'
-import Link from 'next/link'
-import React from 'react'
-const Navbar = () => {
-    return (
-        <header className=" top-0 left-0 z-50 w-full bg-white shadow-sm dark:bg-gray-950">
-            <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-                <Link href="#" className="flex items-center gap-2" prefetch={false}>
+"use client";
+import { Instagram, Linkedin, ShoppingCart, Twitter } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { useRouter } from 'next/navigation'
+import { signIn, signOut, useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie"; // Correctly import js-cookie
+import { useToast } from "@/components/ui/use-toast";
+import jwt from "jsonwebtoken";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { LogOut, UserCircle, UserCog } from "lucide-react";
+import Link from 'next/link';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-                    <span className="text-lg font-semibold">Blog</span>
-                </Link>
-                <nav className="hidden space-x-4 md:flex">
-                    <Link href="#" className="text-sm font-medium hover:underline hover:underline-offset-4" prefetch={false}>
-                        Home
-                    </Link>
-                    <Link href="#" className="text-sm font-medium hover:underline hover:underline-offset-4" prefetch={false}>
-                        About
-                    </Link>
-                    <Link href="/blog" className="text-sm font-medium hover:underline hover:underline-offset-4" prefetch={false}>
-                        Blog
-                    </Link>
-                    <Link href="#" className="text-sm font-medium hover:underline hover:underline-offset-4" prefetch={false}>
-                        Contact
-                    </Link>
-                </nav>
-                <form className="relative flex-1 max-w-md">
-                    <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-gray-400" />
-                    <Input
-                        type="search"
-                        placeholder="Search blog posts..."
-                        className="w-full rounded-md border border-gray-200 bg-gray-100 py-2 pl-10 pr-4 text-sm focus:border-gray-300 focus:outline-none dark:border-gray-800 dark:bg-gray-800 dark:text-gray-50"
-                    />
-                </form>
-                <div className="flex items-center gap-2">
-                    <Link
-                        href="#"
-                        className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
-                        prefetch={false}
-                    >
-                        Login
-                    </Link>
-                    <Link
-                        href="#"
-                        className="inline-flex h-9 items-center justify-center rounded-md border border-gray-200  bg-white px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-800 dark:border-gray-800 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus-visible:ring-gray-300"
-                        prefetch={false}
-                    >
-                        Sign Up
+const Navbar = () => {
+    const [countData, setCountData] = useState(0);
+    const { toast } = useToast();
+    const [nameData, setNameData] = useState("");
+    const [emailData, setEmailData] = useState("");
+    const [passwordData, setPasswordData] = useState("");
+    const [roleData, setRoleData] = useState("user");
+
+    const handleLoginData = async () => {
+        const res = await fetch("/api/user/updateUser", {
+            method: "POST",
+            body: JSON.stringify({
+                email: emailData,
+                password: passwordData,
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        const data = await res.json()
+
+        console.log(data.accessToken);
+
+        localStorage.setItem("accessToken", data.accessToken)
+
+        if (res.status === 500) {
+            console.log(res.statusText);
+        }
+        if (res.status === 200) {
+            console.log("Registering successfully, login with your credentials");
+            window.location.reload();
+        }
+    }
+
+    const handleClickaddData = async () => {
+        const res = await fetch("/api/user/createUser", {
+            method: "POST",
+            body: JSON.stringify({
+                email: emailData,
+                name: nameData,
+                password: passwordData,
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (res.status === 500) {
+            console.log(res.statusText);
+        }
+        if (res.status === 200) {
+            console.log("Registering successfully, login with your credentials");
+            window.location.reload();
+        }
+    }
+
+    // Retrieve the access token from cookies
+
+
+
+    const [decodedToken, setDecodedToken] = useState<any>('');
+
+    useEffect(() => {
+        const decodeToken = (token: string) => {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                console.error('Failed to decode token:', error);
+                return null;
+            }
+        };
+
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            const decoded = decodeToken(token);
+            setDecodedToken(decoded);
+        }
+    }, []);
+    const router = useRouter();
+    return (
+        <div>
+            <div className='bg-gray-200 flex items-center justify-evenly p-3'>
+                <div className='text-red-600 font-bold text-xs sm:text-xl '>
+                    <Link href="/">
+                        CulinaShare
                     </Link>
                 </div>
+                <div className='flex lg:space-x-3 text-xs'>
+                    <Twitter />
+                    <Instagram />
+                    <Linkedin />
+                </div>
+                {
+                    decodedToken ? (
+                        <div className='flex items-center space-x-4'>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Avatar className="cursor-pointer">
+                                        <AvatarImage src={""} alt="@shadcn" />
+                                        <AvatarFallback className="text-primary hover:bg-primary hover:text-white transition-all">
+                                            <UserCog className="h-5" />
+                                        </AvatarFallback>
+                                    </Avatar>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="mr-6 bg-white">
+                                    <DropdownMenuLabel>
+                                        <div className="pr-20 pl-4">
+                                            <h1 className="font-semibold text-md">Signed in as</h1>
+                                            <h1 className="font-semibold text-md">{decodedToken?.name}</h1>
+                                        </div>
+                                    </DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <div onClick={() => { signOut() }}>
+                                        <DropdownMenuItem className="hover:!bg-red-500 cursor-pointer hover:!text-white">
+                                            <LogOut className="mr-2 h-4 w-4" />
+                                            <span>Log out</span>
+                                        </DropdownMenuItem>
+                                    </div>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                            <p>
+                                <Link href="/About">
+                                    About
+                                </Link>
+                            </p>
+                        </div>
+                    ) : (
+                        <div className='flex items-center space-x-4'>
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button variant="outline" className='text-xs p-1 lg:text-lg sm:p-4'>Log In</Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[425px]">
+                                    <DialogHeader>
+                                        <DialogTitle>Create Username</DialogTitle>
+                                        <DialogDescription>
+                                            Make changes to your profile here. Click save when you're done.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="grid gap-4 py-4">
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="username" className="text-right">
+                                                Email
+                                            </Label>
+                                            <Input id="name" value={emailData} className="col-span-3" onChange={(e) => setEmailData(e.target.value)} placeholder="Enter the email" />
+                                        </div>
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="username" className="text-right">
+                                                Password
+                                            </Label>
+                                            <Input id="name" value={passwordData} className="col-span-3" onChange={(e) => setPasswordData(e.target.value)} placeholder="Enter the password" />
+                                        </div>
+                                    </div>
+                                    <DialogFooter>
+                                        <Button onClick={handleLoginData}>Log In</Button>
+                                    </DialogFooter>
+                                    <DialogFooter className='text-red-600'>
+                                        Demo Email :- abc@gmail.com <br />
+                                        Demo Password :- 123456
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button variant="outline" className='text-xs p-1 lg:text-lg sm:p-4'>Sign In</Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[425px]">
+                                    <DialogHeader>
+                                        <DialogTitle>Create Username</DialogTitle>
+                                        <DialogDescription>
+                                            Make changes to your profile here. Click save when you're done.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="grid gap-4 py-4">
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="name" className="text-right">
+                                                Name
+                                            </Label>
+                                            <Input type="text" placeholder="name" className="col-span-3" value={nameData} onChange={(e) => setNameData(e.target.value)} />
+                                        </div>
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="username" className="text-right">
+                                                Email
+                                            </Label>
+                                            <Input type="email" className="col-span-3" placeholder="email" value={emailData} onChange={(e) => setEmailData(e.target.value)} />
+                                        </div>
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="username" className="text-right">
+                                                Password
+                                            </Label>
+                                            <Input className="col-span-3" type="password" placeholder="password" value={passwordData} onChange={(e) => setPasswordData(e.target.value)} />
+                                        </div>
+                                    </div>
+                                    <DialogFooter>
+                                        <Button onClick={handleClickaddData}>Sign In</Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
+                            <p>
+                                <Link href="/About">
+                                    About
+                                </Link>
+                            </p>
+                        </div>
+                    )
+                }
             </div>
-        </header>
+        </div>
     )
 }
 
-export default Navbar
+export default Navbar;
