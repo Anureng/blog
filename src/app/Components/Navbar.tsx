@@ -30,6 +30,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+
 const Navbar = () => {
     const [countData, setCountData] = useState(0);
     const { toast } = useToast();
@@ -144,7 +145,9 @@ const Navbar = () => {
                                     <DropdownMenuLabel>
                                         <div className="pr-20 pl-4">
                                             <h1 className="font-semibold text-md">Signed in as</h1>
-                                            <h1 className="font-semibold text-md">{decodedToken?.name}</h1>
+                                            <Link href={`Profile/${decodedToken.id}`}>
+                                                <h1 className="font-semibold text-md">{decodedToken?.name}</h1>
+                                            </Link>
                                         </div>
                                     </DropdownMenuLabel>
                                     <DropdownMenuSeparator />
