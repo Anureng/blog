@@ -5,7 +5,6 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
     try {
         const cacheKey = "post";
-
         const cachedData = await redis.get(cacheKey);
         if (cachedData) {
             // If data exists in the cache, return it
@@ -23,7 +22,7 @@ export async function GET(request: Request) {
 
         // Store the fetched data in Redis cache with an expiration time
         await redis.set(cacheKey, JSON.stringify(posts));
-
+        await redis.expire(cacheKey, 60)
         // Return the fetched data
         return NextResponse.json(posts);
     } catch (error: any) {
