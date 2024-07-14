@@ -1,9 +1,11 @@
 import React from 'react'
 
-const Profile = () => {
+const Profile = (data: any) => {
+    console.log(data);
+
     return (
         <div>
-
+            heks
         </div>
     )
 }

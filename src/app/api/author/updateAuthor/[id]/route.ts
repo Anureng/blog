@@ -32,3 +32,16 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
         return new NextResponse(error, { status: 500 });
     }
 }
+
+export async function GET(request: Request, { params }: { params: { id: string } }) {
+    try {
+        const data = await client.author.findUnique({
+            where: {
+                id: params.id
+            }
+        })
+        return NextResponse.json(data, { status: 201 });
+    } catch (error: any) {
+        return new NextResponse(error, { status: 500 });
+    }
+}

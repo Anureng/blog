@@ -1,4 +1,7 @@
+import { Chart } from '@/app/Components/Chart';
+import Navbar from '@/app/Components/Navbar';
 import Profile from '@/app/Components/Profile'
+import { ProfileComponent } from '@/components/component/profile-component';
 import React from 'react'
 
 const fetchBlogData = async (id: string) => {
@@ -18,13 +21,15 @@ const fetchBlogData = async (id: string) => {
 
 const page = async (params: { id: string }) => {
 
+
     const data = await fetchBlogData(params.id)
     console.log(data);
 
     return (
         <div>
-            <Profile />
-
+            <Navbar />
+            <Profile data={data} />
+            <ProfileComponent />
         </div>
     )
 }
