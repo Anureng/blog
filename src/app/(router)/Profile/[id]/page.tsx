@@ -1,8 +1,11 @@
-import { Chart } from '@/app/Components/Chart';
 import Navbar from '@/app/Components/Navbar';
 import Profile from '@/app/Components/Profile'
 import { ProfileComponent } from '@/components/component/profile-component';
 import React from 'react'
+
+interface IPARAMS {
+    id: string
+}
 
 const fetchBlogData = async (id: string) => {
     try {
@@ -19,12 +22,8 @@ const fetchBlogData = async (id: string) => {
     }
 };
 
-const page = async (params: { id: string }) => {
-
-
+const page = async ({ params }: { params: IPARAMS }) => {
     const data = await fetchBlogData(params.id)
-    console.log(data);
-
     return (
         <div>
             <Navbar />

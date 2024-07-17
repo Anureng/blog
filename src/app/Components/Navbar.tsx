@@ -3,7 +3,6 @@ import { Instagram, Linkedin, ShoppingCart, Twitter } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation'
-import { signIn, signOut, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie"; // Correctly import js-cookie
 import { useToast } from "@/components/ui/use-toast";
@@ -115,6 +114,21 @@ const Navbar = () => {
             setDecodedToken(decoded);
         }
     }, []);
+
+    const SignOut = async () => {
+        try {
+            const findId = localStorage.removeItem("accessToken")
+            toast({
+                title: "Log Out",
+                description: "successfully Log Out",
+            })
+        } catch (error) {
+            toast({
+                title: "Not able to Log Out",
+                description: "Please Try Again",
+            })
+        }
+    }
     const router = useRouter();
     return (
         <div>
@@ -151,7 +165,7 @@ const Navbar = () => {
                                         </div>
                                     </DropdownMenuLabel>
                                     <DropdownMenuSeparator />
-                                    <div onClick={() => { signOut() }}>
+                                    <div onClick={() => { SignOut() }}>
                                         <DropdownMenuItem className="hover:!bg-red-500 cursor-pointer hover:!text-white">
                                             <LogOut className="mr-2 h-4 w-4" />
                                             <span>Log out</span>

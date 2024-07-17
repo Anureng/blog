@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 import client from "../../../../libs/prismadb";
-import { getPostsFromCache, setPostsToCache } from "@/libs/cacheUtils";
-import { redis } from "@/app/redis/redis";
 
 export async function POST(request: Request) {
     try {
@@ -15,8 +13,8 @@ export async function POST(request: Request) {
                 like,
                 authorId,
                 tags,
-                imageUrl: imageUrl ?? '', // Ensure string
-                excerpt: excerpt ?? '',   // Ensure string
+                imageUrl: imageUrl ?? '',
+                excerpt: excerpt ?? '',
                 slug
             }
         });

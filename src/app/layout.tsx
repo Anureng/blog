@@ -6,6 +6,7 @@ const fontHeading = Inter({
   display: 'swap',
   variable: '--font-heading',
 })
+import { Toaster } from "@/components/ui/toaster"
 
 const fontBody = Inter({
   subsets: ['latin'],
@@ -26,6 +27,7 @@ export default function RootLayout({
         fontBody.variable
       )}>
         {children}
+        <Toaster />
       </body>
     </html>
 
