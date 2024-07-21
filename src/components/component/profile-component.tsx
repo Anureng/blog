@@ -135,7 +135,7 @@ export function ProfileComponent(data: any) {
               <Card>
                 <CardHeader>
                   <CardTitle>Blog Analytics</CardTitle>
-                  <CardDescription>View your blog's performance and engagement metrics.</CardDescription>
+                  <CardDescription>View your blogs performance and engagement metrics.</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-4">
