@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { name, postId } = body;
+        const { name, postId, Description } = body;
 
         // Validate that the user ID, post ID, and comment name are provided
         if (!postId || !name) {
@@ -26,6 +26,7 @@ export async function POST(request: Request) {
             data: {
                 name: name,
                 postId: postId,
+                Description: Description
             },
         });
 

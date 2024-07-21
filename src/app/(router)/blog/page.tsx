@@ -5,7 +5,7 @@ import React from 'react';
 
 const fetchBlogData = async () => {
     try {
-        const res = await fetch("http://localhost:3000/api/blog/getBlogData", {
+        const res = await fetch("https://blog-gold-beta.vercel.app/api/blog/getBlogData", {
             next: { revalidate: 10 }
         });
         if (!res.ok) {

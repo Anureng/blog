@@ -1,6 +1,5 @@
+import DetailBlog from '@/app/Components/DetailBlog';
 import Navbar from '@/app/Components/Navbar';
-import Profile from '@/app/Components/Profile'
-import { ProfileComponent } from '@/components/component/profile-component';
 import React from 'react'
 
 interface IPARAMS {
@@ -9,7 +8,7 @@ interface IPARAMS {
 
 const fetchBlogData = async (id: string) => {
     try {
-        const res = await fetch(`https://blog-gold-beta.vercel.app/api/user/GetUser/${id}`, {
+        const res = await fetch(`https://blog-gold-beta.vercel.app/api/blog/getBlogById/${id}`, {
             next: { revalidate: 10 }
         });
         if (!res.ok) {
@@ -21,15 +20,12 @@ const fetchBlogData = async (id: string) => {
         return null;
     }
 };
-
-
 const page = async ({ params }: { params: IPARAMS }) => {
     const data = await fetchBlogData(params.id)
     return (
         <div>
             <Navbar />
-            <Profile data={data} />
-            <ProfileComponent data={data} />
+            <DetailBlog data={data} />
         </div>
     )
 }

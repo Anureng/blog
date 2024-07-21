@@ -1,5 +1,16 @@
 import { NextResponse } from "next/server";
 import client from "../../../../libs/prismadb";
+import { Server } from 'socket.io';
+
+const io = new Server(3001, {
+    cors: {
+        origin: '*',
+    },
+});
+
+io.on('connection', (socket: any) => {
+    console.log('a user connected');
+});
 
 export async function POST(request: Request) {
     try {
@@ -17,6 +28,17 @@ export async function POST(request: Request) {
                 excerpt: excerpt ?? '',
                 slug
             }
+        });
+        io.emit('new-blog', {
+            title,
+            img,
+            description,
+            like,
+            authorId,
+            tags,
+            imageUrl,
+            excerpt,
+            slug,
         });
         return NextResponse.json(newPost, { status: 201 });
     } catch (error: any) {

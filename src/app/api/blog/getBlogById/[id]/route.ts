@@ -6,7 +6,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
     try {
 
         const cacheKey = `post:${params.id}`;
-        const MAX_AGE = 60 * 60; // 1 hour in seconds
+        const MAX_AGE = 60 * 6; // 1 hour in seconds
 
         // Try to fetch the data from Redis cache
         const cachedData = await redis.get(cacheKey);

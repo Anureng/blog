@@ -10,8 +10,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
                 id: params.id
             },
             data: {
-                name,
-                profileUrl
+                name
             }
         })
         return NextResponse.json(data, { status: 201 });
@@ -38,6 +37,9 @@ export async function GET(request: Request, { params }: { params: { id: string }
         const data = await client.author.findUnique({
             where: {
                 id: params.id
+            },
+            include: {
+                posts: true
             }
         })
         return NextResponse.json(data, { status: 201 });

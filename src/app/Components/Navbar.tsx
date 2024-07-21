@@ -2,7 +2,7 @@
 import { Instagram, Linkedin, ShoppingCart, Twitter } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie"; // Correctly import js-cookie
 import { useToast } from "@/components/ui/use-toast";
@@ -62,6 +62,7 @@ const Navbar = () => {
         if (res.status === 200) {
             console.log("Registering successfully, login with your credentials");
             window.location.reload();
+            redirect("/")
         }
     }
 
@@ -82,7 +83,7 @@ const Navbar = () => {
         }
         if (res.status === 200) {
             console.log("Registering successfully, login with your credentials");
-            window.location.reload();
+            redirect("/")
         }
     }
 
@@ -122,6 +123,7 @@ const Navbar = () => {
                 title: "Log Out",
                 description: "successfully Log Out",
             })
+            redirect("/")
         } catch (error) {
             toast({
                 title: "Not able to Log Out",
