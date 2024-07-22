@@ -9,7 +9,7 @@ interface IPARAMS {
 const fetchBlogData = async (id: string) => {
     try {
         const res = await fetch(`https://blog-gold-beta.vercel.app/api/blog/getBlogById/${id}`, {
-            next: { revalidate: 10 }
+            next: { revalidate: 0 }
         });
         if (!res.ok) {
             throw new Error('Failed to fetch data');
