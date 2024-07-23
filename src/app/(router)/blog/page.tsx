@@ -10,7 +10,6 @@ const fetchBlogData = async () => {
         throw new Error('Failed to fetch data');
     }
     return res.json();
-
 };
 
 const Page = async () => {
