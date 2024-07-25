@@ -174,13 +174,13 @@ export function ProfileComponent(data: any) {
                           datai.map((el: any, index: number) => (
                             <TableRow key={index}>
                               <TableCell>
-                                {el.title}
+                                {el.title.slice(0, 15)}
                               </TableCell>
                               <TableCell>
-                                {el.description}
+                                {el.description.slice(0, 20)}
                               </TableCell>
                               <TableCell>
-                                {el.img}
+                                <img src={el.img} height={50} width={50} />
                               </TableCell>
                               <TableCell>
                                 {el.tags.map((tag: string, tagIndex: number) => <Badge key={tagIndex}>{tag}</Badge>)}
