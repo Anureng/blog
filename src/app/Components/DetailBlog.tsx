@@ -135,7 +135,7 @@ const DetailBlog = ({ data }: any) => {
             <div className="mt-6 space-y-4">
                 {
                     data.comment.map((el: any) => (
-                        <div>
+                        <div key={el.id}>
                             <div className="flex items-center space-x-4">
                                 <img src="/placeholder.svg" alt="Comment Author Avatar" className="h-8 w-8 rounded-full" />
                                 <div>
