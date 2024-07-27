@@ -16,7 +16,6 @@ import axios from "axios"
 import { toast } from "../ui/use-toast"
 
 export function ProfileComponent(data: any) {
-  console.log(data);
 
   const [datai, setDatai] = useState([])
   const [title, setTitle] = useState('')
@@ -24,10 +23,6 @@ export function ProfileComponent(data: any) {
   const [image, setImage] = useState<File | null>(null)
   const [tags, setTags] = useState('')
   const [imageUrl, setImageUrl] = useState<string>("")
-
-  console.log(imageUrl);
-
-
 
   useEffect(() => {
     const author = async () => {
@@ -89,6 +84,9 @@ export function ProfileComponent(data: any) {
       })
     }
   }
+
+  console.log(datai);
+
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
@@ -189,7 +187,12 @@ export function ProfileComponent(data: any) {
                                 {el.like}
                               </TableCell>
                               <TableCell>
-                                {el.like}
+                                {
+                                  el.comment && <div>
+                                    {el.comment.length}
+                                  </div>
+                                }
+
                               </TableCell>
                               <TableCell>
                                 {el.like}

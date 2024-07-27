@@ -138,7 +138,7 @@ const Navbar = () => {
             <div className='bg-gray-200 flex items-center justify-evenly p-3'>
                 <div className='text-red-600 font-bold text-xs sm:text-xl '>
                     <Link href="/">
-                        CulinaShare
+                        BlogAPP
                     </Link>
                 </div>
                 <div className='flex lg:space-x-3 text-xs'>

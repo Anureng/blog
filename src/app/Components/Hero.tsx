@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import Link from 'next/link'
 import React from 'react'
 
 const Hero = () => {
@@ -13,8 +14,16 @@ const Hero = () => {
                             Discover the latest news, insights, and trends in our blog.
                         </p>
                         <div className="flex gap-4">
-                            <Button>Read More</Button>
-                            <Button variant="secondary">Subscribe</Button>
+                            <Button>
+                                <Link href="/blog">
+                                    Read More
+                                </Link>
+                            </Button>
+                            <Button variant="secondary">
+                                <Link href="/blog">
+                                    Subscribe
+                                </Link>
+                            </Button>
                         </div>
                     </div>
                     <div>
@@ -32,7 +41,11 @@ const Hero = () => {
                         <p className="text-gray-700 dark:text-gray-300 text-lg">
                             Read our latest featured article and stay up-to-date with the latest trends and insights.
                         </p>
-                        <Button>Read More</Button>
+                        <Button>
+                            <Link href="/blog">
+                                Read More
+                            </Link>
+                        </Button>
                     </div>
                 </div>
             </section>
@@ -51,7 +64,11 @@ const Hero = () => {
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec ultricies lacinia, nisl
                                     nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl.
                                 </p>
-                                <Button>Read More</Button>
+                                <Button>
+                                    <Link href="/blog">
+                                        Read More
+                                    </Link>
+                                </Button>
                             </div>
                         </div>
                         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md">
@@ -62,7 +79,11 @@ const Hero = () => {
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec ultricies lacinia, nisl
                                     nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl.
                                 </p>
-                                <Button>Read More</Button>
+                                <Button>
+                                    <Link href="/blog">
+                                        Read More
+                                    </Link>
+                                </Button>
                             </div>
                         </div>
                         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md">
@@ -73,7 +94,11 @@ const Hero = () => {
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec ultricies lacinia, nisl
                                     nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl.
                                 </p>
-                                <Button>Read More</Button>
+                                <Button>
+                                    <Link href="/blog">
+                                        Read More
+                                    </Link>
+                                </Button>
                             </div>
                         </div>
                     </div>
@@ -94,7 +119,11 @@ const Hero = () => {
                                 placeholder="Enter your email"
                                 className="flex-1 bg-white dark:bg-gray-800 dark:text-gray-300"
                             />
-                            <Button>Subscribe</Button>
+                            <Button>
+                                <Link href="/blog">
+                                    Subscribe
+                                </Link>
+                            </Button>
                         </div>
                     </div>
                     <div>
