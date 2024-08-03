@@ -1,4 +1,5 @@
-import React from 'react';
+"use client"
+import React, { useState } from 'react';
 import { POSTTYPE } from '@/types/type';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
@@ -8,8 +9,10 @@ interface Props {
 }
 
 const AllData: React.FC<Props> = ({ data }) => {
-    console.log(data);
 
+    const [searchData, setSearchData] = useState<string>("")
+
+    const filterData = data.filter((el) => el.title.toLocaleLowerCase().includes(searchData.toLocaleLowerCase()))
     return (
         <div className="flex flex-col min-h-screen">
             <div className="container mx-auto py-8 md:py-12">
@@ -25,28 +28,17 @@ const AllData: React.FC<Props> = ({ data }) => {
                                 type="text"
                                 placeholder="Search blog posts..."
                                 className="w-full"
+                                value={searchData}
+                                onChange={(e) => setSearchData(e.target.value)}
                             />
                         </div>
                         <div>
-                            <label htmlFor="tags" className="block font-medium mb-2">
-                                Tags
-                            </label>
                             <div className="grid grid-cols-2 gap-2">
-                                {/* {uniqueTags.map((tag) => (
-                                    <Button
-                                        key={tag}
-                                        variant={selectedTags.includes(tag) ? "primary" : "outline"}
-                                        onClick={() => handleTagClick(tag)}
-                                        className="w-full"
-                                    >
-                                        {tag}
-                                    </Button>
-                                ))} */}
                             </div>
                         </div>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {data.map((post: any) => (
+                        {filterData.map((post: any) => (
                             <div key={post.id} className="bg-background rounded-lg shadow-md overflow-hidden">
                                 <Link href={`/detail/${post.id}`} prefetch={false}>
                                     <img
